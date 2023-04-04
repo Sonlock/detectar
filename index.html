@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Detección de colores</title>
+    <script>
+      function detectarColores() {
+        // Obtener la imagen y el contexto del canvas
+        var imagen = document.getElementById('imagen');
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+
+        // Configurar el canvas con las mismas dimensiones que la imagen
+        canvas.width = imagen.width;
+        canvas.height = imagen.height;
+
+        // Dibujar la imagen en el canvas
+        context.drawImage(imagen, 0, 0, canvas.width, canvas.height);
+
+        // Obtener los datos de los píxeles del canvas
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        var data = imageData.data;
+
+        // Contar los píxeles verdes, amarillos y rojos
+        var verde = 0;
+        var amarillo = 0;
+        var rojo = 0;
+        for (var i = 0; i < data.length; i += 4) {
+          var r = data[i];
+          var g = data[i + 1];
+          var b = data[i + 2];
+
+          if (r < 50 && g > 100 && b < 50) {
+            verde++;
+          } else if (r > 200 && g > 200 && b < 50) {
+            amarillo++;
+          } else if (r > 200 && g < 50 && b < 50) {
+            rojo++;
+          }
+        }
+
+        // Determinar el color predominante
+        var color;
+        if (verde > amarillo && verde > rojo) {
+          color = 'verde';
+        } else if (amarillo > verde && amarillo > rojo) {
+          color = 'amarillo';
+        } else if (rojo > verde && rojo > amarillo) {
+          color = 'rojo';
+        } else {
+          color = 'desconocido';
+        }
+
+        // Mostrar el resultado
+        alert('El color predominante es ' + color);
+      }
+    </script>
+  </head>
+  <body>
+    <img id="imagen" src="ruta/a/la/imagen.jpg" />
+    <button onclick="detectarColores()">Detectar colores</button>
+  </body>
+</html>
